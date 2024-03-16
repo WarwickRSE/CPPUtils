@@ -23,4 +23,30 @@ struct extract_value_type<X<T, dim_>>   //specialization
     static const int dim = dim_;
 };
 
+//Get information about a callable
+template <typename T>
+struct callableTraits : callableTraits<decltype(&T::operator())> {};
+
+//For functors and lambdas
+template <typename C, typename R, typename... Args>
+struct callableTraits<R(C::*)(Args...) const> {
+    using type = R;
+    using params = std::tuple<Args...>;
+};
+
+//For functions
+template <typename R, typename... Args>
+struct callableTraits<R(*)(Args...)> {
+    using type = R;
+    using params = std::tuple<Args...>;
+};
+
+template <typename R, typename... Args>
+struct callableTraits<R(Args...)> {
+    using type = R;
+    using params = std::tuple<Args...>;
+};
+
+
+
 #endif

@@ -57,6 +57,30 @@ timer time_and_run(func f, Args... args){
   return t;
 };
 
+// Actual "decorator" class for functions returning NON VOID type
+template <typename func>
+class timed_func{
+    timer t;
+    func f;
+    public:
+    timed_func(func f_in):f(f_in){}
+    using return_type = typename callableTraits<func>::type;
+    template <typename... Args>
+    return_type operator()(Args... args ){
+      t.begin();
+      auto ret = f(args...);
+      t.end();
+      return ret;
+    }
+    long get_time(){return t.get_current_time();}
+    void print_time(){t.print_current_time();}
 
+};
+
+// Shortcut to do the decorating
+template <typename func>
+timed_func<func> add_timer(func f){
+    return timed_func<func>(f);
+}
 
 #endif
