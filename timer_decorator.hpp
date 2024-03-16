@@ -83,4 +83,10 @@ timed_func<func> add_timer(func f){
     return timed_func<func>(f);
 }
 
+template <typename ret, typename... Args>
+auto add_timer_overloaded(ret(*f)(Args...)){
+    return timed_func<ret(*)(Args...)>(f);
+}
+
+
 #endif

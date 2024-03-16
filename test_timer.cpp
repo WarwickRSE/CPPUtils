@@ -15,6 +15,14 @@ double func(int a, float b){
 
 };
 
+double func2(){
+  std::cout<<"nothing"<<std::endl;
+  return 0.0;
+}
+double func2(int a, float b){
+  return func(a, b);
+}
+
 int main(){
 
   func(1, 2.0);
@@ -28,6 +36,18 @@ int main(){
   auto tf2 = add_timer(func);
   tf2(1, 2.0);
   tf2.print_time();
+
+
+// Options for overloaded versions
+
+  // Specify the signature
+  auto tff2 = timed_func<double(*)(int, float)>(func2);
+  tff2(1, 2.0);
+  tff2.print_time();
+  // Ditto but via return type then param types
+  auto tff3 = add_timer_overloaded<double, int, float>(func2);
+  tff3(1, 2.0);
+  tff3.print_time();
 
   return 0;
 
