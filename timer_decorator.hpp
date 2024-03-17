@@ -68,9 +68,15 @@ class timed_func{
     template <typename... Args>
     return_type operator()(Args... args ){
       t.begin();
-      auto ret = f(args...);
-      t.end();
-      return ret;
+      if constexpr(std::is_same_v<return_type, void>){
+        f(args...);
+        t.end();
+        return;
+      }else{
+        auto ret = f(args...);
+        t.end();
+        return ret;
+      }
     }
     long get_time(){return t.get_current_time();}
     void print_time(){t.print_current_time();}
